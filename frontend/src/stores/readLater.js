@@ -61,6 +61,17 @@ export const useReadLaterStore = defineStore('readLater', () => {
     fetchReadLater(1, status)
   }
 
+  // 注销/切换账号时清空缓存，避免上一个账号的数据残留
+  function reset() {
+    links.value = []
+    total.value = 0
+    currentPage.value = 1
+    totalPages.value = 1
+    loading.value = false
+    stats.value = { pending: 0, completed: 0, skipped: 0, total: 0 }
+    filterStatus.value = 'pending'
+  }
+
   return {
     links,
     total,
@@ -74,5 +85,6 @@ export const useReadLaterStore = defineStore('readLater', () => {
     removeFromReadLater,
     updateReviewStatus,
     setFilterStatus,
+    reset,
   }
 })

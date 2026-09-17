@@ -53,9 +53,17 @@ const router = createRouter({
 
 router.beforeEach((to, from, next) => {
   const authStore = useAuthStore()
+  // main.js 在挂载前已执行 init()，这里兜底保证刷新直达受保护页面时也能恢复会话
+  authStore.init()
 
   if (to.meta.requiresAuth && !authStore.isLoggedIn) {
-    next({ name: 'Login' })
+    next({
+      name: 'Login',
+      query: {
+        reason: 'auth-required',
+        redirect: to.fullPath,
+      },
+    })
   } else if (to.meta.guest && authStore.isLoggedIn) {
     next({ name: 'Home' })
   } else {

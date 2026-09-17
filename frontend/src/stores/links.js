@@ -126,6 +126,20 @@ export const useLinksStore = defineStore('links', () => {
     fetchLinks(1)
   }
 
+  // 注销/切换账号时清空缓存，避免上一个账号的数据残留
+  function reset() {
+    links.value = []
+    categories.value = []
+    tags.value = []
+    total.value = 0
+    currentPage.value = 1
+    totalPages.value = 1
+    loading.value = false
+    selectedCategory.value = null
+    selectedTag.value = null
+    searchQuery.value = ''
+  }
+
   return {
     links,
     categories,
@@ -150,5 +164,6 @@ export const useLinksStore = defineStore('links', () => {
     setTag,
     setSearch,
     clearFilters,
+    reset,
   }
 })

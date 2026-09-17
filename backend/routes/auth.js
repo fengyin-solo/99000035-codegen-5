@@ -53,12 +53,12 @@ router.post('/login', (req, res) => {
   const user = db.prepare('SELECT * FROM users WHERE username = ?').get(username);
 
   if (!user) {
-    return res.status(401).json({ error: 'Invalid credentials' });
+    return res.status(401).json({ error: '用户名不存在', code: 'USER_NOT_FOUND' });
   }
 
   const validPassword = bcrypt.compareSync(password, user.password);
   if (!validPassword) {
-    return res.status(401).json({ error: 'Invalid credentials' });
+    return res.status(401).json({ error: '密码不正确', code: 'WRONG_PASSWORD' });
   }
 
   const token = jwt.sign({ userId: user.id }, JWT_SECRET, { expiresIn: '7d' });

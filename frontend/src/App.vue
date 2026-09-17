@@ -6,15 +6,10 @@
 </template>
 
 <script setup>
-import { onMounted } from 'vue'
 import { useAuthStore } from './stores/auth'
 import Navbar from './components/Navbar.vue'
 
 const authStore = useAuthStore()
-
-onMounted(() => {
-  authStore.loadFromStorage()
-})
 </script>
 
 <style>
