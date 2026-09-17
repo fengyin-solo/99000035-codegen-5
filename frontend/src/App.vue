@@ -1,20 +1,17 @@
 <template>
   <div id="app">
-    <Navbar v-if="authStore.isLoggedIn" />
+    <Navbar v-if="authStore.isLoggedIn && !route.meta.guest" />
     <router-view />
   </div>
 </template>
 
 <script setup>
-import { onMounted } from 'vue'
+import { useRoute } from 'vue-router'
 import { useAuthStore } from './stores/auth'
 import Navbar from './components/Navbar.vue'
 
+const route = useRoute()
 const authStore = useAuthStore()
-
-onMounted(() => {
-  authStore.loadFromStorage()
-})
 </script>
 
 <style>

@@ -55,8 +55,9 @@ router.beforeEach((to, from, next) => {
   const authStore = useAuthStore()
 
   if (to.meta.requiresAuth && !authStore.isLoggedIn) {
-    next({ name: 'Login' })
-  } else if (to.meta.guest && authStore.isLoggedIn) {
+    // 保留刚才正要访问的入口地址，登录成功后可跳回
+    next({ name: 'Login', query: { reason: 'AUTH_REQUIRED', redirect: to.fullPath } })
+  } else if (to.meta.guest && authStore.isLoggedIn && to.query.switch === undefined) {
     next({ name: 'Home' })
   } else {
     next()

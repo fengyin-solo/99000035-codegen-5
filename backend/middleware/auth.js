@@ -6,7 +6,7 @@ function authMiddleware(req, res, next) {
   const authHeader = req.headers.authorization;
 
   if (!authHeader || !authHeader.startsWith('Bearer ')) {
-    return res.status(401).json({ error: 'No token provided' });
+    return res.status(401).json({ error: '未登录，请先登录', code: 'NO_TOKEN' });
   }
 
   const token = authHeader.split(' ')[1];
@@ -16,7 +16,10 @@ function authMiddleware(req, res, next) {
     req.userId = decoded.userId;
     next();
   } catch (err) {
-    return res.status(401).json({ error: 'Invalid token' });
+    if (err.name === 'TokenExpiredError') {
+      return res.status(401).json({ error: '登录状态已过期，请重新登录', code: 'TOKEN_EXPIRED' });
+    }
+    return res.status(401).json({ error: '登录状态无效，请重新登录', code: 'TOKEN_INVALID' });
   }
 }
 

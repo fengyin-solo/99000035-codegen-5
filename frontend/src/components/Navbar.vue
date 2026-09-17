@@ -27,6 +27,10 @@
         <el-icon><User /></el-icon>
         {{ authStore.user?.username }}
       </template>
+      <el-menu-item index="switch" @click="handleSwitchAccount">
+        <el-icon><Switch /></el-icon>
+        切换账号
+      </el-menu-item>
       <el-menu-item index="logout" @click="handleLogout">
         <el-icon><SwitchButton /></el-icon>
         退出登录
@@ -48,6 +52,14 @@ function handleLogout() {
   authStore.logout()
   ElMessage.success('已退出登录')
   router.push('/login')
+}
+
+function handleSwitchAccount() {
+  // 保留当前入口地址，新账号登录后可回到这里
+  router.push({
+    path: '/login',
+    query: { switch: '1', redirect: router.currentRoute.value.fullPath },
+  })
 }
 </script>
 
